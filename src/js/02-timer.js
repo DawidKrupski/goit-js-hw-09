@@ -1,5 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import Notiflix from 'notiflix';
 
 const date = document.querySelector('#datetime-picker');
 const btn = document.querySelector('button');
@@ -22,7 +23,7 @@ const options = {
     const currentDate = selectedDates[0].getTime();
     if (currentDate < today) {
       btn.disabled = true;
-      window.alert('Please choose a date in the future');
+      Notiflix.Notify.failure('Please choose a date in the future');
       return false;
     }
     btn.disabled = false;
@@ -31,50 +32,59 @@ const options = {
 };
 
 flatpickr(date, options);
+intervalId = null;
 
 const calculateTime = () => {
-  function convertMs(ms) {
-    ms = dateSelect - today;
-    console.log(ms);
-    // Number of milliseconds per unit of time
-    const second = 1000;
-    const minute = second * 60;
-    const hour = minute * 60;
-    const day = hour * 24;
-
-    const addLeadingZero = arg => {
-      if (arg <= 9) {
-        return '0' + arg;
-      } else {
-        return arg;
+  btn.disabled = true;
+  intervalId = setInterval(() => {
+    function convertMs(ms) {
+      ms = dateSelect - today;
+      if (ms <= 0) {
+        btn.disabled = false;
+        clearInterval(intervalId);
+        ms = 0;
       }
-    };
+      today = new Date().getTime();
+      // Number of milliseconds per unit of time
+      const second = 1000;
+      const minute = second * 60;
+      const hour = minute * 60;
+      const day = hour * 24;
 
-    // Remaining days
-    const days = addLeadingZero(Math.floor(ms / day));
-    // Remaining hours
-    const hours = addLeadingZero(Math.floor((ms % day) / hour));
-    // Remaining minutes
-    const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
-    // Remaining seconds
-    const seconds = addLeadingZero(
-      Math.floor((((ms % day) % hour) % minute) / second)
-    );
+      const addLeadingZero = arg => {
+        if (arg <= 9) {
+          return '0' + arg;
+        } else {
+          return arg;
+        }
+      };
 
-    const setValue = (value, container) => {
-      if (value !== 0) {
-        return (container.textContent = value);
-      }
-    };
+      // Remaining days
+      const days = addLeadingZero(Math.floor(ms / day));
+      // Remaining hours
+      const hours = addLeadingZero(Math.floor((ms % day) / hour));
+      // Remaining minutes
+      const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
+      // Remaining seconds
+      const seconds = addLeadingZero(
+        Math.floor((((ms % day) % hour) % minute) / second)
+      );
 
-    setValue(days, dateDays);
-    setValue(hours, dateHours);
-    setValue(minutes, dateMinutes);
-    setValue(seconds, dateSeconds);
+      const setValue = (value, container) => {
+        if (value !== 0) {
+          return (container.textContent = value);
+        }
+      };
 
-    return { days, hours, minutes, seconds };
-  }
-  console.log(convertMs(ms));
+      setValue(days, dateDays);
+      setValue(hours, dateHours);
+      setValue(minutes, dateMinutes);
+      setValue(seconds, dateSeconds);
+
+      return { days, hours, minutes, seconds };
+    }
+    convertMs(ms);
+  }, 1000);
 };
 
 btn.addEventListener('click', calculateTime);
