@@ -37,6 +37,7 @@ intervalId = null;
 const calculateTime = () => {
   btn.disabled = true;
   intervalId = setInterval(() => {
+    today = new Date().getTime();
     function convertMs(ms) {
       ms = dateSelect - today;
       if (ms <= 0) {
@@ -44,7 +45,6 @@ const calculateTime = () => {
         clearInterval(intervalId);
         ms = 0;
       }
-      today = new Date().getTime();
       // Number of milliseconds per unit of time
       const second = 1000;
       const minute = second * 60;
