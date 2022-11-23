@@ -18,6 +18,10 @@ function createPromise() {
 
 const send = event => {
   event.preventDefault();
+  if (amount.value <= 0) {
+    Notiflix.Notify.failure(`❌ Amount can't be lower than 1`);
+    return false;
+  }
   setTimeout(() => {
     for (i = 0; i < amount.value; i++) {
       let position = i + 1;
