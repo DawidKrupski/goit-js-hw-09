@@ -32,7 +32,7 @@ const options = {
 };
 
 flatpickr(date, options);
-intervalId = null;
+let intervalId = null;
 
 const calculateTime = () => {
   btn.disabled = true;

@@ -23,7 +23,7 @@ const send = event => {
     return false;
   }
   setTimeout(() => {
-    for (i = 0; i < amount.value; i++) {
+    for (let i = 0; i < amount.value; i++) {
       let position = i + 1;
       let delay = delayStep.value * i + Number(firstDelay.value);
       setTimeout(() => {
