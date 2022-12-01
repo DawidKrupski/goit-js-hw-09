@@ -47,7 +47,7 @@ const calculateTime = () => {
         btn.disabled = false;
         clearInterval(intervalId);
         ms = 0;
-        Notiflix.Notify.success('Countdown finished');
+        Notiflix.Notify.info('countdown finished');
       }
       // Number of milliseconds per unit of time
       const second = 1000;
