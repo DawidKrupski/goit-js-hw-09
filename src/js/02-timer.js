@@ -13,6 +13,7 @@ btn.disabled = true;
 let today = new Date().getTime();
 let ms = 0;
 let dateSelect = 0;
+let calculatedDate = 0;
 
 const options = {
   enableTime: true,
@@ -28,6 +29,7 @@ const options = {
     }
     btn.disabled = false;
     dateSelect = currentDate;
+    calculatedDate = 0;
   },
 };
 
@@ -35,15 +37,17 @@ flatpickr(date, options);
 let intervalId = null;
 
 const calculateTime = () => {
+  calculatedDate = dateSelect;
   btn.disabled = true;
   intervalId = setInterval(() => {
     today = new Date().getTime();
     function convertMs(ms) {
-      ms = dateSelect - today;
+      ms = calculatedDate - today;
       if (ms <= 0) {
         btn.disabled = false;
         clearInterval(intervalId);
         ms = 0;
+        Notiflix.Notify.success('Countdown finished');
       }
       // Number of milliseconds per unit of time
       const second = 1000;
