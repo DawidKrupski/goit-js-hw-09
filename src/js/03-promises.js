@@ -1,5 +1,6 @@
 import Notiflix from 'notiflix';
 
+const form = document.querySelector('form');
 const submit = document.querySelector(`[type="submit"]`);
 const firstDelay = document.querySelector(`[name="delay"]`);
 const delayStep = document.querySelector(`[name="step"]`);
@@ -17,6 +18,12 @@ function createPromise() {
 }
 
 const send = event => {
+  submit.disabled = true;
+  let disabledTime = delayStep.value * amount.value + Number(firstDelay.value);
+  setTimeout(() => {
+    submit.disabled = false;
+    form.reset();
+  }, disabledTime);
   event.preventDefault();
   if (amount.value <= 0) {
     Notiflix.Notify.failure(`❌ Amount can't be lower than 1`);
